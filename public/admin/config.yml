@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: YOUR-GITHUB-USERNAME/cohealthnews
+  repo: Beko-G/cohealthnews
   branch: main
 
 media_folder: public/uploads
