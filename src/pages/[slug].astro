@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const date = post.data.date.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
+});
+---
+<Base title={`${post.data.title} | CoHealthNews`} description={post.data.description} image={post.data.image} type="article">
+  <article class="article">
+    <div class="narrow">
+      <span class="tag">{post.data.category}</span>
+      <h1>{post.data.title}</h1>
+      <p class="meta">Published {date}</p>
+      {post.data.image && <img class="cover" src={post.data.image} alt={post.data.title} />}
+      <div class="prose">
+        <Content />
+      </div>
+      <p class="disclaimer">This article is for general information only and is not medical advice. Talk to a qualified health professional about your own situation.</p>
+    </div>
+  </article>
+</Base>

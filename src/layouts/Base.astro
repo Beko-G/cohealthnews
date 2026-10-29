@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = 'CoHealthNews shares clear, easy to read news and explainers about health, nutrition and wellness.',
+  image,
+  type = 'website',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = image ? new URL(image, Astro.site).href : undefined;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+
+    <!--
+      GOOGLE ANALYTICS (GA4): Paste your GA4 snippet here once you have it.
+      Mediavine wants GA4 connected before you apply.
+    -->
+
+    <!--
+      GROW BY MEDIAVINE: Paste the Grow script here after you sign up.
+      Install it early. Journey needs it, and it should run for a while before review.
+    -->
+
+    <!--
+      MEDIAVINE / JOURNEY AD SCRIPT: Paste it here only after you are approved.
+    -->
+  </head>
+  <body>
+    <header>
+      <div class="nav">
+        <a class="logo" href="/">CoHealthNews</a>
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <p>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/terms">Terms</a>
+        <a href="/contact">Contact</a>
+      </p>
+      <p>&copy; {new Date().getFullYear()} CoHealthNews. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
